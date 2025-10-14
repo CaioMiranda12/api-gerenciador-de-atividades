@@ -1,6 +1,7 @@
 package com.caiocesar.gerenciador_de_atividades.controller;
 
 import com.caiocesar.gerenciador_de_atividades.dto.activity.ActivityDTO;
+import com.caiocesar.gerenciador_de_atividades.dto.activity.CreateActivityDTO;
 import com.caiocesar.gerenciador_de_atividades.services.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class ActivityController {
     private final ActivityService activityService;
 
     @PostMapping
-    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO activityDTO){
-        ActivityDTO createdActivity = activityService.createActivity(activityDTO);
+    public ResponseEntity<ActivityDTO> createActivity(@RequestBody CreateActivityDTO createActivityDTO){
+        ActivityDTO createdActivity = activityService.createActivity(createActivityDTO);
         return ResponseEntity.status(201).body(createdActivity);
     }
 

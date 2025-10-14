@@ -1,6 +1,7 @@
 package com.caiocesar.gerenciador_de_atividades.services;
 
 import com.caiocesar.gerenciador_de_atividades.dto.activity.ActivityDTO;
+import com.caiocesar.gerenciador_de_atividades.dto.activity.CreateActivityDTO;
 import com.caiocesar.gerenciador_de_atividades.infrastructure.entity.Activity;
 import com.caiocesar.gerenciador_de_atividades.infrastructure.entity.Group;
 import com.caiocesar.gerenciador_de_atividades.infrastructure.repository.ActivityRepository;
@@ -19,14 +20,14 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final GroupRepository groupRepository;
 
-    public ActivityDTO createActivity(ActivityDTO activityDTO){
-        Group group = groupRepository.findById(activityDTO.getGroupId())
+    public ActivityDTO createActivity(CreateActivityDTO createActivityDTO){
+        Group group = groupRepository.findById(createActivityDTO.getGroupId())
                 .orElseThrow(() -> new EntityNotFoundException("Group not found"));
 
         Activity activity = new Activity();
-        activity.setDescription(activityDTO.getDescription());
-        activity.setDueDate(activityDTO.getDueDate());
-        activity.setCompleted(activityDTO.isCompleted());
+        activity.setDescription(createActivityDTO.getDescription());
+        activity.setDueDate(createActivityDTO.getDueDate());
+        activity.setCompleted(false);
         activity.setGroup(group);
 
         Activity savedActivity = activityRepository.save(activity);

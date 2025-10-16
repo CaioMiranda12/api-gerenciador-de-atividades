@@ -3,6 +3,7 @@ CREATE TABLE activities (
     description TEXT NOT NULL,
     due_date DATE,
     completed BOOLEAN NOT NULL DEFAULT FALSE,
+    position INTEGER NOT NULL DEFAULT 0,
     group_id INTEGER NOT NULL,
     CONSTRAINT fk_group
         FOREIGN KEY (group_id)

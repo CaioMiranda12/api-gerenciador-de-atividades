@@ -19,6 +19,7 @@ public class ActivityDTO {
     private boolean completed;
     private Long groupId;
     private String groupName;
+    private Integer position;
 
     public ActivityDTO(Activity activity){
         this.id = activity.getId();
@@ -27,6 +28,7 @@ public class ActivityDTO {
         this.completed = activity.isCompleted();
         this.groupId = activity.getGroup().getId();
         this.groupName = activity.getGroup().getName();
+        this.position = activity.getPosition();
     }
 
 }

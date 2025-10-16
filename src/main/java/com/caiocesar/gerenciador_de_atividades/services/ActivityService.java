@@ -7,6 +7,7 @@ import com.caiocesar.gerenciador_de_atividades.infrastructure.entity.Group;
 import com.caiocesar.gerenciador_de_atividades.infrastructure.repository.ActivityRepository;
 import com.caiocesar.gerenciador_de_atividades.infrastructure.repository.GroupRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,14 @@ public class ActivityService {
         Group group = groupRepository.findById(createActivityDTO.getGroupId())
                 .orElseThrow(() -> new EntityNotFoundException("Group not found"));
 
+        int lastPosition = activityRepository.countByGroupId(group.getId());
+
         Activity activity = new Activity();
         activity.setDescription(createActivityDTO.getDescription());
         activity.setDueDate(createActivityDTO.getDueDate());
         activity.setCompleted(false);
         activity.setGroup(group);
+        activity.setPosition(lastPosition);
 
         Activity savedActivity = activityRepository.save(activity);
         return new ActivityDTO(savedActivity);
@@ -76,5 +80,22 @@ public class ActivityService {
         }
 
         activityRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void reorderActivities(List<ActivityDTO> reorderedActivities) {
+        for (ActivityDTO dto : reorderedActivities) {
+            Activity activity = activityRepository.findById(dto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+
+            if (dto.getGroupId() != null) {
+                Group newGroup = groupRepository.findById(dto.getGroupId())
+                        .orElseThrow(() -> new EntityNotFoundException("Group not found"));
+                activity.setGroup(newGroup);
+            }
+
+            activity.setPosition(dto.getPosition());
+            activityRepository.save(activity);
+        }
     }
 }

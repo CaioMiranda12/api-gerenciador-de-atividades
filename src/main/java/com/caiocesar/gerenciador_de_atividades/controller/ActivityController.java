@@ -40,4 +40,10 @@ public class ActivityController {
         activityService.deleteActivity(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/reorder")
+    public ResponseEntity<Void> reorderActivities(@RequestBody List<ActivityDTO> reorderedActivities) {
+        activityService.reorderActivities(reorderedActivities);
+        return ResponseEntity.ok().build();
+    }
 }

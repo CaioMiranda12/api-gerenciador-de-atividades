@@ -26,4 +26,8 @@ public class Activity {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @Column(nullable = false)
+    private Integer position;
+
+
 }

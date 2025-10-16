@@ -115,3 +115,6 @@ cd api-gerenciador-de-atividades
 
 #### Agora, já é possível rodar o projeto e gerar o banco de dados.
 
+O backend estará disponível em (baseURL):
+👉 http://localhost:8080
+

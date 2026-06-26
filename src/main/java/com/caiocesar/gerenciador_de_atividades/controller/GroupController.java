@@ -2,7 +2,7 @@ package com.caiocesar.gerenciador_de_atividades.controller;
 
 import com.caiocesar.gerenciador_de_atividades.dto.group.CreateGroupDTO;
 import com.caiocesar.gerenciador_de_atividades.dto.group.GroupDTO;
-import com.caiocesar.gerenciador_de_atividades.services.GroupService;
+import com.caiocesar.gerenciador_de_atividades.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

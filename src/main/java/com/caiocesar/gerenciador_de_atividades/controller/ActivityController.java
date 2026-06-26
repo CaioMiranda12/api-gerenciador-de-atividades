@@ -2,7 +2,13 @@ package com.caiocesar.gerenciador_de_atividades.controller;
 
 import com.caiocesar.gerenciador_de_atividades.dto.activity.ActivityDTO;
 import com.caiocesar.gerenciador_de_atividades.dto.activity.CreateActivityDTO;
-import com.caiocesar.gerenciador_de_atividades.services.ActivityService;
+import com.caiocesar.gerenciador_de_atividades.dto.activity.ReorderActivityDTO;
+import com.caiocesar.gerenciador_de_atividades.infrastructure.entity.Activity;
+import com.caiocesar.gerenciador_de_atividades.infrastructure.entity.Group;
+import com.caiocesar.gerenciador_de_atividades.infrastructure.repository.ActivityRepository;
+import com.caiocesar.gerenciador_de_atividades.infrastructure.repository.GroupRepository;
+import com.caiocesar.gerenciador_de_atividades.service.ActivityService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +22,8 @@ import java.util.List;
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final ActivityRepository activityRepository;
+    private final GroupRepository groupRepository;
 
     @PostMapping
     public ResponseEntity<ActivityDTO> createActivity(@RequestBody CreateActivityDTO createActivityDTO){
@@ -42,8 +50,19 @@ public class ActivityController {
     }
 
     @PutMapping("/reorder")
-    public ResponseEntity<Void> reorderActivities(@RequestBody List<ActivityDTO> reorderedActivities) {
-        activityService.reorderActivities(reorderedActivities);
-        return ResponseEntity.ok().build();
+    public void reorderActivities(@RequestBody List<ReorderActivityDTO> reorderedActivities) {
+        for (ReorderActivityDTO dto : reorderedActivities) {
+            Activity activity = activityRepository.findById(dto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Activity not found"));
+
+            if (dto.getGroupId() != null) {
+                Group newGroup = groupRepository.findById(dto.getGroupId())
+                        .orElseThrow(() -> new EntityNotFoundException("Group not found"));
+                activity.setGroup(newGroup);
+            }
+
+            activity.setPosition(dto.getPosition());
+            activityRepository.save(activity);
+        }
     }
 }

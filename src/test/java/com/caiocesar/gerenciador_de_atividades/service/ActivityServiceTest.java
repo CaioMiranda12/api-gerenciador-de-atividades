@@ -34,37 +34,37 @@ class ActivityServiceTest {
     private ActivityService activityService;
 
     @Test
-    void createActivity_deveRetornarActivityDTO() {
-        CreateActivityDTO dto = new CreateActivityDTO("Atividade Teste", LocalDate.now(), 1L);
+    void createActivity_shouldReturnActivityDTO() {
+        CreateActivityDTO dto = new CreateActivityDTO("Test activity", LocalDate.now(), 1L);
 
-        Group grupo = new Group();
-        grupo.setId(1L);
-        grupo.setName("Grupo Teste");
-        grupo.setActivities(new ArrayList<>());
+        Group group = new Group();
+        group.setId(1L);
+        group.setName("Test group");
+        group.setActivities(new ArrayList<>());
 
-        Activity atividadeSalva = new Activity();
-        atividadeSalva.setId(1L);
-        atividadeSalva.setDescription("Atividade Teste");
-        atividadeSalva.setDueDate(LocalDate.now());
-        atividadeSalva.setCompleted(false);
-        atividadeSalva.setGroup(grupo);
-        atividadeSalva.setPosition(0);
+        Activity savedActivity = new Activity();
+        savedActivity.setId(1L);
+        savedActivity.setDescription("Test activity");
+        savedActivity.setDueDate(LocalDate.now());
+        savedActivity.setCompleted(false);
+        savedActivity.setGroup(group);
+        savedActivity.setPosition(0);
 
-        when(groupRepository.findById(1L)).thenReturn(Optional.of(grupo));
+        when(groupRepository.findById(1L)).thenReturn(Optional.of(group));
         when(activityRepository.countByGroupId(1L)).thenReturn(0);
-        when(activityRepository.save(any(Activity.class))).thenReturn(atividadeSalva);
+        when(activityRepository.save(any(Activity.class))).thenReturn(savedActivity);
 
-        ActivityDTO resultado = activityService.createActivity(dto);
+        ActivityDTO result = activityService.createActivity(dto);
 
-        assertNotNull(resultado);
-        assertEquals("Atividade Teste", resultado.getDescription());
-        assertEquals(1L, resultado.getGroupId());
-        assertFalse(resultado.isCompleted());
+        assertNotNull(result);
+        assertEquals("Test activity", result.getDescription());
+        assertEquals(1L, result.getGroupId());
+        assertFalse(result.isCompleted());
     }
 
     @Test
-    void createActivity_deveLancarExcecao_quandoGroupNaoExistir() {
-        CreateActivityDTO dto = new CreateActivityDTO("Atividade Teste", LocalDate.now(), 99L);
+    void createActivity_shouldThrowException_whenGroupNotFound() {
+        CreateActivityDTO dto = new CreateActivityDTO("Test activity", LocalDate.now(), 99L);
 
         when(groupRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -73,7 +73,7 @@ class ActivityServiceTest {
     }
 
     @Test
-    void deleteActivity_deveLancarExcecao_quandoNaoExistir() {
+    void deleteActivity_shouldThrowException_whenNotFound() {
         when(activityRepository.existsById(99L)).thenReturn(false);
 
         assertThrows(ResourceNotFoundException.class, () -> activityService.deleteActivity(99L));
@@ -81,7 +81,7 @@ class ActivityServiceTest {
     }
 
     @Test
-    void deleteActivity_deveDeletar_quandoExistir() {
+    void deleteActivity_shouldDelete_whenExists() {
         when(activityRepository.existsById(1L)).thenReturn(true);
 
         activityService.deleteActivity(1L);

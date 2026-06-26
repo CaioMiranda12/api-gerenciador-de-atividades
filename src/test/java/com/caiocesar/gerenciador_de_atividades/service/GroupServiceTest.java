@@ -28,49 +28,49 @@ class GroupServiceTest {
     private GroupService groupService;
 
     @Test
-    void createGroup_deveRetornarGroupDTO() {
+    void createGroup_shouldReturnGroupDTO() {
         CreateGroupDTO dto = new CreateGroupDTO("Grupo Teste");
 
-        Group grupoSalvo = new Group();
-        grupoSalvo.setId(1L);
-        grupoSalvo.setName("Grupo Teste");
-        grupoSalvo.setActivities(new ArrayList<>());
+        Group savedGroup = new Group();
+        savedGroup.setId(1L);
+        savedGroup.setName("Grupo Teste");
+        savedGroup.setActivities(new ArrayList<>());
 
-        when(groupRepository.save(any(Group.class))).thenReturn(grupoSalvo);
+        when(groupRepository.save(any(Group.class))).thenReturn(savedGroup);
 
-        GroupDTO resultado = groupService.createGroup(dto);
+        GroupDTO result = groupService.createGroup(dto);
 
-        assertNotNull(resultado);
-        assertEquals("Grupo Teste", resultado.getName());
-        assertEquals(1L, resultado.getId());
+        assertNotNull(result);
+        assertEquals("Grupo Teste", result.getName());
+        assertEquals(1L, result.getId());
         verify(groupRepository, times(1)).save(any(Group.class));
     }
 
     @Test
-    void getGroupById_deveRetornarGroupDTO_quandoExistir() {
-        Group grupo = new Group();
-        grupo.setId(1L);
-        grupo.setName("Grupo Teste");
-        grupo.setActivities(new ArrayList<>());
+    void getGroupById_shouldReturnGroupDTO_whenExists() {
+        Group group = new Group();
+        group.setId(1L);
+        group.setName("Test group");
+        group.setActivities(new ArrayList<>());
 
-        when(groupRepository.findById(1L)).thenReturn(Optional.of(grupo));
+        when(groupRepository.findById(1L)).thenReturn(Optional.of(group));
 
-        GroupDTO resultado = groupService.getGroupById(1L);
+        GroupDTO result = groupService.getGroupById(1L);
 
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.getId());
-        assertEquals("Grupo Teste", resultado.getName());
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("Grupo Teste", result.getName());
     }
 
     @Test
-    void getGroupById_deveLancarExcecao_quandoNaoExistir() {
+    void getGroupById_shouldThrowException_whenNotFound() {
         when(groupRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> groupService.getGroupById(99L));
     }
 
     @Test
-    void deleteGroup_deveLancarExcecao_quandoNaoExistir() {
+    void deleteGroup_shouldThrowException_whenNotFound() {
         when(groupRepository.existsById(99L)).thenReturn(false);
 
         assertThrows(ResourceNotFoundException.class, () -> groupService.deleteGroup(99L));
@@ -78,7 +78,7 @@ class GroupServiceTest {
     }
 
     @Test
-    void deleteGroup_deveDeletar_quandoExistir() {
+    void deleteGroup_shouldDelete_whenExists() {
         when(groupRepository.existsById(1L)).thenReturn(true);
 
         groupService.deleteGroup(1L);

@@ -86,35 +86,6 @@ docker compose down
 
 ---
 
-## 🖥️ Como Executar Localmente (sem Docker)
-
-### Pré-requisitos
-- Java 21
-- Maven
-- PostgreSQL rodando localmente
-
-### Passos
-
-```bash
-# 1. Clonar o repositório
-git clone https://github.com/CaioMiranda12/api-gerenciador-de-atividades.git
-cd api-gerenciador-de-atividades
-```
-
-Configure o banco no `application.properties`:
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/gerenciador-atividades
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
-
-```bash
-# 2. Rodar a aplicação
-./mvnw spring-boot:run
-```
-
----
-
 ## 📄 Documentação Swagger
 
 Com a aplicação rodando, acesse:
